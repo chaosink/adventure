@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+adventure
+
+# Configure
+config.log
+config.status
+
+# Make
+adventure.o
+graphics.o
+main.o
