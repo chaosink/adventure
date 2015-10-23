@@ -31,6 +31,8 @@ adventure
 # Configure
 config.log
 config.status
+Makefile
+.deps/
 
 # Make
 adventure.o
