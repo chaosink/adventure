@@ -36,5 +36,4 @@ Makefile
 
 # Make
 adventure.o
-graphics.o
 main.o

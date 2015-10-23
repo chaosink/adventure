@@ -1,26 +1,10 @@
+#include "adventure.hpp"
 #include <iostream>
-#include <ctime>
+#include <map>
+#include <time.h>
 #include <cstdlib>
 #include <cassert>
 #include <cstdio>
-#include <unistd.h>
-#include "adventure.hpp"
-#include "graphics.hpp"
-
-extern GLFWwindow* window;
-extern GLint position_x_max;
-extern GLint position_y_max;
-extern GLint position_z_max;
-extern GLint position_x_min;
-extern GLint position_y_min;
-extern GLint position_z_min;
-extern GLint position_x;
-extern GLint position_y;
-extern GLint position_z;
-extern GLint door[6];
-extern GLint find_monster;
-extern GLint find_princess;
-extern GLint success;
 
 Castle::Castle(int k_room, int size) {
 	assert(k_room > 0);
@@ -78,12 +62,6 @@ void Castle::Generate() {
 	if(k_room_ != 1) GenerateRoom(k_room_ - 1, 0, 0, 0);
 	printf("The castle generated! Location: x: %d~%d, y: %d~%d, z: %d~%d.\n", min_.x, max_.x, min_.y, max_.y, min_.z, max_.z);
 	GenerateCharactor();
-	position_x_min = min_.x;
-	position_y_min = min_.y;
-	position_z_min = min_.z;
-	position_x_max = max_.x;
-	position_y_max = max_.y;
-	position_z_max = max_.z;
 }
 
 void Castle::GenerateCharactor() {
@@ -298,49 +276,41 @@ int Castle::OneNeighbor(int x, int y, int z) {
 void Castle::Run() {
 	vector<int> coordinate(3);
 	string command;
+	char ch;
 	int com;
 	int n;
 	cout << "Press ENTER to start...";
 	getchar();
-//	cout << endl;
-	glfwShowWindow(window);
-	while(!glfwWindowShouldClose(window)) {
-		position_x = coordinate[0] = hero_.coordinate_x();
-		position_y = coordinate[1] = hero_.coordinate_y();
-		position_z = coordinate[2] = hero_.coordinate_z();
+	getchar();
+	cout << endl;
+	while(1) {
+		coordinate[0] = hero_.coordinate_x();
+		coordinate[1] = hero_.coordinate_y();
+		coordinate[2] = hero_.coordinate_z();
 		n = room_index_[coordinate];
-		for(int i = 0; i < 6; i++) door[i] = room_[n].door(i);
-		if(n == monster_.room()) find_monster = 1;
-		if(!hero_.find_princess() && n == princess_.room()) find_princess = 1;
-		if(find_princess && n == 1) success = 1;
-		Render(window);
-		glfwSwapBuffers(window);
-		glfwPollEvents();
-//		printf("Welcome to Room[%d %d %d].\n", coordinate[0], coordinate[1], coordinate[2]);
+		printf("Welcome to Room[%d %d %d].\n", coordinate[0], coordinate[1], coordinate[2]);
 		if(n == monster_.room()) {
-/*			cout << "The monster found! Game over!" << endl;
-			cout << "Press ENTER to try again...";*/
-//			getchar();
-//			cout << endl;
+			cout << "The monster found! Game over!" << endl;
+			cout << "Press ENTER to try again...";
+			getchar();
+			cout << endl;
 			hero_.Initialize();
-			sleep(1);
 			continue;
-//			return;
+//			exit(0);
 		}
 		if(!hero_.find_princess() && n == princess_.room()) {
 			hero_.find_princess(1);
-/*			cout << "The princess found! Well done!" << endl;
-			cout << "Press ENTER to continue...";*/
-//			getchar();
+			cout << "The princess found! Well done!" << endl;
+			cout << "Press ENTER to continue...";
+			getchar();
 		}
 		if(hero_.find_princess() && n == 1) {
-/*			cout << "You have saved the princess from the castle successfully! Congratulations!" << endl;
-			cout << "Press ENTER to quit..." << endl;*/
-			sleep(1);
-//			getchar();
-			return;
+			cout << "You have saved the princess from the castle successfully! Congratulations!" << endl;
+			cout << "Press ENTER to quit...";
+			getchar();
+			exit(0);
 		}
-/*		printf("There are %d exits as:", room_[n].k_door());
+		printf("There are %d exits as:", room_[n].k_door());
 		int j = room_[n].k_door();
 		for(int i = 0; i < 6; i++) {
 			if(room_[n].door(i)) {
@@ -381,7 +351,7 @@ void Castle::Run() {
 			if(command == "q" || command == "Q" || command == "5") com = 5;
 		}
 		hero_.Move(com);
-		cout << endl;*/
+		cout << endl;
 	}
 }
 

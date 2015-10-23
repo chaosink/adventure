@@ -4,7 +4,6 @@
 #include <vector>
 #include <map>
 #include <string>
-#include "graphics.hpp"
 using namespace std;
 
 class Castle;
@@ -95,7 +94,6 @@ class Castle {
 	int Unblock();
 	int OneNeighbor(int x, int y, int z);
 public:
-	friend void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 	Castle(int k_room, int size);
 	Castle(int k_room, int size_x, int size_y, int size_z);
 	Castle(int k_room, int min_x, int max_x, int min_y, int max_y, int min_z, int max_z);
